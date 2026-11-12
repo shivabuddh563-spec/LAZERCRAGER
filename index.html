@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>LAZER CRAZER | Hauz Khas Arena Booking</title>
+  <style>
+    :root {
+      --neon: #39ff14;
+      --cyan: #00f0ff;
+      --bg: #05070a;
+      --surface: #0e131d;
+      --card: #141b29;
+      --border: rgba(57, 255, 20, 0.22);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(57, 255, 20, 0.14) 0%, transparent 55%),
+        linear-gradient(rgba(57, 255, 20, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(57, 255, 20, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 28px 28px, 28px 28px;
+      color: var(--text);
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      padding: 12px;
+    }
+    .app {
+      width: 100%;
+      max-width: 450px;
+      background: rgba(14, 19, 29, 0.92);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(57, 255, 20, 0.08);
+    }
+
+    /* Header & Live Status */
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .live-badge { display: flex; align-items: center; gap: 6px; background: rgba(57, 255, 20, 0.1); border: 1px solid rgba(57, 255, 20, 0.3); color: var(--neon); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 99px; }
+    .dot { width: 7px; height: 7px; background: var(--neon); border-radius: 50%; box-shadow: 0 0 8px var(--neon); animation: pulse 1.4s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.3); } }
+    .rating-pill { font-size: 11px; color: #fbbf24; font-weight: 700; background: rgba(251, 191, 36, 0.1); padding: 4px 10px; border-radius: 99px; }
+
+    .hero { text-align: center; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .hero h1 { font-size: 26px; font-weight: 900; letter-spacing: 1.5px; background: linear-gradient(90deg, #fff, var(--neon)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+    /* Tabs */
+    .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #090d14; padding: 5px; border-radius: 12px; margin: 14px 0; border: 1px solid rgba(255,255,255,0.06); }
+    .tab { padding: 8px 4px; text-align: center; font-size: 12px; font-weight: 700; color: var(--muted); border-radius: 8px; cursor: pointer; transition: 0.2s; }
+    .tab.active { background: var(--neon); color: #05070a; box-shadow: 0 0 12px rgba(57, 255, 20, 0.4); }
+
+    .sec-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--cyan); font-weight: 700; margin: 14px 0 8px; display: flex; justify-content: space-between; }
+
+    /* Game Cards */
+    .games { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .game { background: var(--card); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 12px; cursor: pointer; position: relative; transition: 0.2s; }
+    .game.active { border-color: var(--neon); background: linear-gradient(145deg, rgba(57, 255, 20, 0.14), rgba(14, 19, 29, 0.9)); box-shadow: 0 0 18px rgba(57, 255, 20, 0.15); }
+    .game .tag { position: absolute; top: 8px; right: 8px; font-size: 9px; font-weight: 800; background: var(--cyan); color: #000; padding: 2px 6px; border-radius: 4px; }
+    .game h3 { font-size: 14px; margin-bottom: 4px; color: #fff; }
+    .game .price { font-size: 13px; font-weight: 800; color: var(--neon); }
+    .game .desc { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+    /* Slider */
+    .slider-box { background: var(--card); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.07); }
+    input[type="range"] { width: 100%; accent-color: var(--neon); cursor: pointer; }
+    .presets { display: flex; gap: 6px; margin-top: 8px; }
+    .preset-btn { flex: 1; background: #0b0f17; border: 1px solid rgba(255,255,255,0.1); color: var(--muted); font-size: 11px; padding: 5px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+    .preset-btn:hover { border-color: var(--neon); color: #fff; }
+
+    /* Inputs */
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    input[type="date"], input[type="text"], input[type="tel"], select {
+      width: 100%; background: var(--card); border: 1px solid rgba(255,255,255,0.12); color: #fff;
+      padding: 11px; border-radius: 10px; font-size: 13px; outline: none;
+    }
+    input:focus, select:focus { border-color: var(--neon); }
+
+    /* Addons */
+    .addon { display: flex; justify-content: space-between; align-items: center; background: var(--card); border: 1px solid rgba(255,255,255,0.08); padding: 10px 12px; border-radius: 10px; margin-bottom: 7px; cursor: pointer; font-size: 12.5px; }
+    .addon input { width: 17px; height: 17px; accent-color: var(--neon); }
+
+    /* Summary Card */
+    .summary { background: linear-gradient(180deg, #0b101b 0%, #070a10 100%); border: 1px solid var(--neon); border-radius: 14px; padding: 14px; margin-top: 14px; }
+    .s-row { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--muted); margin-bottom: 5px; }
+    .s-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 900; color: #fff; border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 8px; margin-top: 6px; }
+    .s-total span:last-child { color: var(--neon); }
+    .lock-banner { background: rgba(57, 255, 20, 0.12); color: var(--neon); font-size: 11.5px; font-weight: 700; padding: 7px 10px; border-radius: 8px; margin-top: 8px; display: flex; justify-content: space-between; }
+
+    .main-btn { width: 100%; background: linear-gradient(90deg, var(--neon), #28d90b); color: #040608; font-weight: 900; font-size: 15px; padding: 14px; border: none; border-radius: 12px; margin-top: 12px; cursor: pointer; letter-spacing: 0.5px; box-shadow: 0 6px 25px rgba(57, 255, 20, 0.35); }
+    .err { color: #ff5c5c; font-size: 12px; text-align: center; margin-top: 6px; display: none; }
+
+    /* Modal & VIP Pass */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); z-index: 999; justify-content: center; align-items: center; padding: 14px; }
+    .modal { background: var(--surface); border: 2px solid var(--neon); border-radius: 20px; padding: 20px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 0 40px rgba(57, 255, 20, 0.25); }
+    .qr-wrap { background: #fff; padding: 10px; border-radius: 12px; display: inline-block; margin: 12px 0; }
+    .qr-wrap img { width: 145px; height: 145px; display: block; }
+    .upi-link { display: block; background: var(--neon); color: #000; font-weight: 800; text-decoration: none; padding: 12px; border-radius: 10px; font-size: 14px; }
+    .ghost-btn { width: 100%; background: #1e293b; color: #fff; border: 1px solid #334155; padding: 10px; border-radius: 10px; font-size: 12.5px; margin-top: 8px; cursor: pointer; font-weight: 600; }
+    
+    /* VIP Ticket */
+    .ticket { background: linear-gradient(135deg, #111827, #06090f); border: 1.5px dashed var(--neon); border-radius: 14px; padding: 14px; text-align: left; margin-top: 10px; position: relative; }
+    .ticket-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 8px; }
+    .ticket-body { font-size: 12px; line-height: 1.7; color: #e2e8f0; }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <div class="top-bar">
+    <div class="live-badge"><span class="dot"></span> HAUZ KHAS ARENA LIVE</div>
+    <div class="rating-pill">★ 5,000+ Parties Hosted</div>
+  </div>
+
+  <div class="hero">
+    <h1>LAZER CRAZER</h1>
+    <p>Build Your Custom Party Package & Lock Slot in 60s</p>
+  </div>
+
+  <!-- Event Type Switcher -->
+  <div class="tabs">
+    <div class="tab active" onclick="setMode('party', this)">🎂 Birthday</div>
+    <div class="tab" onclick="setMode('friends', this)">🎮 Squad</div>
+    <div class="tab" onclick="setMode('corp', this)">🏢 Corporate</div>
+  </div>
+
+  <div class="sec-title"><span>1. Select Arena Mission</span></div>
+  <div class="games">
+    <div class="game active" id="g-laser" onclick="pickGame('laser')">
+      <span class="tag">POPULAR</span>
+      <h3>🔫 Laser Tag</h3>
+      <div class="price">₹599 / player</div>
+      <div class="desc">Multi-level neon arena + vests</div>
+    </div>
+    <div class="game" id="g-combo" onclick="pickGame('combo')">
+      <span class="tag" style="background:var(--neon);">VIP</span>
+      <h3>🏎️ Sim + VR + Laser</h3>
+      <div class="price">₹899 / player</div>
+      <div class="desc">Gran Turismo + VR + Laser Tag</div>
+    </div>
+  </div>
+
+  <div class="sec-title">
+    <span>2. Squad Size</span>
+    <span id="pCount" style="color:var(--neon);">12 Players</span>
+  </div>
+  <div class="slider-box">
+    <input type="range" id="pSlider" min="4" max="40" value="12" oninput="calc()" />
+    <div class="presets">
+      <button class="preset-btn" onclick="setPlayers(6)">6 (Squad)</button>
+      <button class="preset-btn" onclick="setPlayers(12)">12 (Party)</button>
+      <button class="preset-btn" onclick="setPlayers(20)">20 (Mega)</button>
+      <button class="preset-btn" onclick="setPlayers(30)">30 (Full Arena)</button>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>3. Pick Date & Peak Slot</span></div>
+  <div class="row-2">
+    <input type="date" id="dateEl" />
+    <select id="slotEl">
+      <option>02:00 PM (4 Slots Left)</option>
+      <option>04:30 PM (2 Slots Left)</option>
+      <option selected>07:00 PM (1 Slot Left 🔥)</option>
+    </select>
+  </div>
+
+  <div class="sec-title"><span>4. Party Upgrades</span></div>
+  <label class="addon">
+    <span>🎉 Private Neon Lounge + Cake Table (₹1,500)</span>
+    <input type="checkbox" id="addDecor" checked onchange="calc()" />
+  </label>
+  <label class="addon">
+    <span>🍕 Unlimited Pizza, Fries & Mocktails (₹299/head)</span>
+    <input type="checkbox" id="addFood" onchange="calc()" />
+  </label>
+
+  <div class="sec-title"><span>5. Host Contact</span></div>
+  <div class="row-2">
+    <input type="text" id="uName" placeholder="Host Name" />
+    <input type="tel" id="uPhone" placeholder="WhatsApp Number" maxlength="10" />
+  </div>
+
+  <div class="summary">
+    <div class="s-row"><span id="lblGame">Laser Tag (12 × ₹599)</span><span id="costGame">₹7,188</span></div>
+    <div class="s-row"><span>Party Upgrades</span><span id="costAddon">₹1,500</span></div>
+    <div class="s-total"><span>Total Package</span><span id="costTotal">₹8,688</span></div>
+    <div class="lock-banner">
+      <span>Pay 20% UPI Advance to Lock Slot:</span>
+      <span id="costAdv">₹1,738</span>
+    </div>
+  </div>
+
+  <p class="err" id="errBox">Please enter Host Name & valid 10-digit WhatsApp number.</p>
+  <button class="main-btn" onclick="openPay()">LOCK SLOT & GET VIP PASS →</button>
+</div>
+
+<!-- Modal -->
+<div class="overlay" id="modal">
+  <div class="modal">
+    <div id="stepPay">
+      <h2 style="color:var(--neon); font-size:18px;">Instant UPI Slot Lock</h2>
+      <p style="font-size:12px; color:var(--muted); margin-top:4px;">Scan or tap below to pay <strong id="mAdv" style="color:#fff;">₹1,738</strong> advance.</p>
+      <div class="qr-wrap"><img id="qrPic" src="" alt="QR" /></div>
+      <a id="upiBtn" href="#" class="upi-link">Pay via GPay / PhonePe / Paytm</a>
+      <button class="ghost-btn" onclick="completeDemo()">Simulate Payment & Generate VIP Pass ✓</button>
+      <button class="ghost-btn" style="background:transparent;border:none;color:var(--muted);" onclick="closeModal()">Cancel</button>
+    </div>
+
+    <div id="stepDone" style="display:none;">
+      <div style="font-size:32px;">🎟️</div>
+      <h2 style="color:var(--neon); font-size:18px;">VIP Arena Pass Ready!</h2>
+      <p style="font-size:11.5px; color:var(--muted);">Auto-sent to Customer WhatsApp & Arena Desk</p>
+      <div class="ticket" id="ticketData"></div>
+      <button class="main-btn" onclick="closeModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const CATALOG = {
+    laser: { title: 'Laser Tag', rate: 599 },
+    combo: { title: 'Sim + VR + Laser', rate: 899 }
+  };
+  let selectedKey = 'laser';
+  let totalAmt = 8688;
+  let advAmt = 1738;
+
+  const todayStr = new Date().toISOString().split('T')[0];
+  const dateInput = document.getElementById('dateEl');
+  dateInput.min = todayStr;
+  dateInput.value = todayStr;
+
+  function setMode(mode, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    if (mode === 'party') { document.getElementById('addDecor').checked = true; setPlayers(12); }
+    if (mode === 'friends') { document.getElementById('addDecor').checked = false; setPlayers(6); }
+    if (mode === 'corp') { document.getElementById('addDecor').checked = true; document.getElementById('addFood').checked = true; setPlayers(20); }
+  }
+
+  function pickGame(key) {
+    selectedKey = key;
+    document.getElementById('g-laser').classList.toggle('active', key === 'laser');
+    document.getElementById('g-combo').classList.toggle('active', key === 'combo');
+    calc();
+  }
+
+  function setPlayers(n) {
+    document.getElementById('pSlider').value = n;
+    calc();
+  }
+
+  function calc() {
+    const qty = parseInt(document.getElementById('pSlider').value, 10);
+    const item = CATALOG[selectedKey];
+    const gCost = qty * item.rate;
+    let aCost = 0;
+    if (document.getElementById('addDecor').checked) aCost += 1500;
+    if (document.getElementById('addFood').checked) aCost += (qty * 299);
+
+    totalAmt = gCost + aCost;
+    advAmt = Math.round(totalAmt * 0.20);
+
+    document.getElementById('pCount').textContent = qty + ' Players';
+    document.getElementById('lblGame').textContent = `${item.title} (${qty} × ₹${item.rate})`;
+    document.getElementById('costGame').textContent = '₹' + gCost.toLocaleString('en-IN');
+    document.getElementById('costAddon').textContent = '₹' + aCost.toLocaleString('en-IN');
+    document.getElementById('costTotal').textContent = '₹' + totalAmt.toLocaleString('en-IN');
+    document.getElementById('costAdv').textContent = '₹' + advAmt.toLocaleString('en-IN');
+  }
+
+  function openPay() {
+    const name = document.getElementById('uName').value.trim();
+    const phone = document.getElementById('uPhone').value.trim();
+    if (!name || !/^[6-9]\d{9}$/.test(phone)) {
+      document.getElementById('errBox').style.display = 'block';
+      return;
+    }
+    document.getElementById('errBox').style.display = 'none';
+
+    const upi = `upi://pay?pa=lazercrazer@upi&pn=Lazer%20Crazer&am=${advAmt}&cu=INR&tn=Arena%20Slot`;
+    document.getElementById('mAdv').textContent = '₹' + advAmt.toLocaleString('en-IN');
+    document.getElementById('upiBtn').href = upi;
+    document.getElementById('qrPic').src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(upi)}`;
+
+    document.getElementById('stepPay').style.display = 'block';
+    document.getElementById('stepDone').style.display = 'none';
+    document.getElementById('modal').style.display = 'flex';
+  }
+
+  function completeDemo() {
+    const name = document.getElementById('uName').value.trim();
+    const phone = document.getElementById('uPhone').value.trim();
+    const qty = document.getElementById('pSlider').value;
+    const dt = document.getElementById('dateEl').value;
+    const sl = document.getElementById('slotEl').value.split(' (')[0];
+    const passId = 'LC-VIP-' + Math.floor(1000 + Math.random() * 9000);
+
+    document.getElementById('ticketData').innerHTML = `
+      <div class="ticket-head">
+        <strong style="color:var(--neon);">${passId}</strong>
+        <span style="font-size:10px;background:var(--neon);color:#000;padding:2px 6px;border-radius:4px;font-weight:800;">CONFIRMED</span>
+      </div>
+      <div class="ticket-body">
+        <strong>Host:</strong> ${name} (+91 ${phone})<br/>
+        <strong>Mission:</strong> ${CATALOG[selectedKey].title} (${qty} Players)<br/>
+        <strong>Date & Time:</strong> ${dt} @ ${sl}<br/>
+        <strong>Advance Paid:</strong> ₹${advAmt.toLocaleString('en-IN')} (UPI)<br/>
+        <strong>Due at Arena:</strong> ₹${(totalAmt - advAmt).toLocaleString('en-IN')}
+      </div>
+    `;
+    document.getElementById('stepPay').style.display = 'none';
+    document.getElementById('stepDone').style.display = 'block';
+  }
+
+  function closeModal() { document.getElementById('modal').style.display = 'none'; }
+  calc();
+</script>
+</body>
+</html>
