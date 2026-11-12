@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>LAZER CRAZER | Hauz Khas Arena Booking</title>
+  <title>LAZER CRAZER | Customer & Owner Portal</title>
   <style>
     :root {
       --neon: #39ff14;
@@ -11,7 +11,7 @@
       --bg: #05070a;
       --surface: #0e131d;
       --card: #141b29;
-      --border: rgba(57, 255, 20, 0.22);
+      --border: rgba(57, 255, 20, 0.25);
       --text: #f8fafc;
       --muted: #94a3b8;
     }
@@ -31,193 +31,270 @@
     }
     .app {
       width: 100%;
-      max-width: 450px;
-      background: rgba(14, 19, 29, 0.92);
+      max-width: 460px;
+      background: rgba(14, 19, 29, 0.94);
       backdrop-filter: blur(14px);
       border: 1px solid var(--border);
       border-radius: 22px;
-      padding: 18px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(57, 255, 20, 0.08);
+      padding: 16px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
     }
 
-    /* Header & Live Status */
-    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .live-badge { display: flex; align-items: center; gap: 6px; background: rgba(57, 255, 20, 0.1); border: 1px solid rgba(57, 255, 20, 0.3); color: var(--neon); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 99px; }
-    .dot { width: 7px; height: 7px; background: var(--neon); border-radius: 50%; box-shadow: 0 0 8px var(--neon); animation: pulse 1.4s infinite; }
-    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.3); } }
-    .rating-pill { font-size: 11px; color: #fbbf24; font-weight: 700; background: rgba(251, 191, 36, 0.1); padding: 4px 10px; border-radius: 99px; }
+    /* Master Role Switcher */
+    .role-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      background: #070a10;
+      padding: 5px;
+      border-radius: 14px;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      margin-bottom: 14px;
+    }
+    .role-btn {
+      padding: 9px 6px;
+      text-align: center;
+      font-size: 12.5px;
+      font-weight: 800;
+      border-radius: 10px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: 0.2s;
+      position: relative;
+    }
+    .role-btn.active {
+      background: linear-gradient(90deg, var(--neon), #28d90b);
+      color: #05070a;
+      box-shadow: 0 0 15px rgba(57, 255, 20, 0.35);
+    }
+    .role-btn.owner-active {
+      background: linear-gradient(90deg, var(--cyan), #0284c7);
+      color: #05070a;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.35);
+    }
+    .badge-count {
+      background: #ef4444;
+      color: #fff;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 99px;
+      margin-left: 4px;
+    }
 
-    .hero { text-align: center; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .hero h1 { font-size: 26px; font-weight: 900; letter-spacing: 1.5px; background: linear-gradient(90deg, #fff, var(--neon)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero p { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    /* Header */
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .live-badge { display: flex; align-items: center; gap: 6px; background: rgba(57, 255, 20, 0.1); border: 1px solid rgba(57, 255, 20, 0.3); color: var(--neon); font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 99px; }
+    .dot { width: 6px; height: 6px; background: var(--neon); border-radius: 50%; animation: pulse 1.4s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .rating-pill { font-size: 10.5px; color: #fbbf24; font-weight: 700; background: rgba(251, 191, 36, 0.1); padding: 3px 9px; border-radius: 99px; }
 
-    /* Tabs */
-    .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #090d14; padding: 5px; border-radius: 12px; margin: 14px 0; border: 1px solid rgba(255,255,255,0.06); }
-    .tab { padding: 8px 4px; text-align: center; font-size: 12px; font-weight: 700; color: var(--muted); border-radius: 8px; cursor: pointer; transition: 0.2s; }
-    .tab.active { background: var(--neon); color: #05070a; box-shadow: 0 0 12px rgba(57, 255, 20, 0.4); }
+    .hero { text-align: center; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .hero h1 { font-size: 24px; font-weight: 900; letter-spacing: 1.5px; background: linear-gradient(90deg, #fff, var(--neon)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
 
-    .sec-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--cyan); font-weight: 700; margin: 14px 0 8px; display: flex; justify-content: space-between; }
+    /* Customer View Styles */
+    .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #090d14; padding: 5px; border-radius: 12px; margin: 12px 0; }
+    .tab { padding: 7px 4px; text-align: center; font-size: 11.5px; font-weight: 700; color: var(--muted); border-radius: 8px; cursor: pointer; }
+    .tab.active { background: rgba(57, 255, 20, 0.18); color: var(--neon); border: 1px solid rgba(57, 255, 20, 0.4); }
 
-    /* Game Cards */
-    .games { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .game { background: var(--card); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 12px; cursor: pointer; position: relative; transition: 0.2s; }
-    .game.active { border-color: var(--neon); background: linear-gradient(145deg, rgba(57, 255, 20, 0.14), rgba(14, 19, 29, 0.9)); box-shadow: 0 0 18px rgba(57, 255, 20, 0.15); }
-    .game .tag { position: absolute; top: 8px; right: 8px; font-size: 9px; font-weight: 800; background: var(--cyan); color: #000; padding: 2px 6px; border-radius: 4px; }
-    .game h3 { font-size: 14px; margin-bottom: 4px; color: #fff; }
-    .game .price { font-size: 13px; font-weight: 800; color: var(--neon); }
-    .game .desc { font-size: 11px; color: var(--muted); margin-top: 3px; }
+    .sec-title { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--cyan); font-weight: 700; margin: 12px 0 6px; display: flex; justify-content: space-between; }
+    .games { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .game { background: var(--card); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 10px; cursor: pointer; position: relative; }
+    .game.active { border-color: var(--neon); background: rgba(57, 255, 20, 0.1); }
+    .game .tag { position: absolute; top: 7px; right: 7px; font-size: 8.5px; font-weight: 800; background: var(--cyan); color: #000; padding: 2px 5px; border-radius: 4px; }
+    .game h3 { font-size: 13.5px; margin-bottom: 3px; color: #fff; }
+    .game .price { font-size: 12.5px; font-weight: 800; color: var(--neon); }
+    .game .desc { font-size: 10.5px; color: var(--muted); margin-top: 2px; }
 
-    /* Slider */
-    .slider-box { background: var(--card); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.07); }
-    input[type="range"] { width: 100%; accent-color: var(--neon); cursor: pointer; }
-    .presets { display: flex; gap: 6px; margin-top: 8px; }
-    .preset-btn { flex: 1; background: #0b0f17; border: 1px solid rgba(255,255,255,0.1); color: var(--muted); font-size: 11px; padding: 5px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-    .preset-btn:hover { border-color: var(--neon); color: #fff; }
+    .slider-box { background: var(--card); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.07); }
+    input[type="range"] { width: 100%; accent-color: var(--neon); }
+    .presets { display: flex; gap: 5px; margin-top: 6px; }
+    .preset-btn { flex: 1; background: #0b0f17; border: 1px solid rgba(255,255,255,0.1); color: var(--muted); font-size: 10.5px; padding: 4px; border-radius: 6px; cursor: pointer; }
 
-    /* Inputs */
     .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     input[type="date"], input[type="text"], input[type="tel"], select {
       width: 100%; background: var(--card); border: 1px solid rgba(255,255,255,0.12); color: #fff;
-      padding: 11px; border-radius: 10px; font-size: 13px; outline: none;
+      padding: 10px; border-radius: 10px; font-size: 12.5px; outline: none;
     }
-    input:focus, select:focus { border-color: var(--neon); }
+    .addon { display: flex; justify-content: space-between; align-items: center; background: var(--card); border: 1px solid rgba(255,255,255,0.08); padding: 9px 11px; border-radius: 10px; margin-bottom: 6px; cursor: pointer; font-size: 12px; }
+    .addon input { width: 16px; height: 16px; accent-color: var(--neon); }
 
-    /* Addons */
-    .addon { display: flex; justify-content: space-between; align-items: center; background: var(--card); border: 1px solid rgba(255,255,255,0.08); padding: 10px 12px; border-radius: 10px; margin-bottom: 7px; cursor: pointer; font-size: 12.5px; }
-    .addon input { width: 17px; height: 17px; accent-color: var(--neon); }
-
-    /* Summary Card */
-    .summary { background: linear-gradient(180deg, #0b101b 0%, #070a10 100%); border: 1px solid var(--neon); border-radius: 14px; padding: 14px; margin-top: 14px; }
-    .s-row { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--muted); margin-bottom: 5px; }
-    .s-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 900; color: #fff; border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 8px; margin-top: 6px; }
+    .summary { background: #090d14; border: 1px solid var(--neon); border-radius: 12px; padding: 12px; margin-top: 12px; }
+    .s-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .s-total { display: flex; justify-content: space-between; font-size: 16.5px; font-weight: 900; color: #fff; border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 6px; margin-top: 5px; }
     .s-total span:last-child { color: var(--neon); }
-    .lock-banner { background: rgba(57, 255, 20, 0.12); color: var(--neon); font-size: 11.5px; font-weight: 700; padding: 7px 10px; border-radius: 8px; margin-top: 8px; display: flex; justify-content: space-between; }
+    .lock-banner { background: rgba(57, 255, 20, 0.12); color: var(--neon); font-size: 11px; font-weight: 700; padding: 6px 9px; border-radius: 7px; margin-top: 7px; display: flex; justify-content: space-between; }
 
-    .main-btn { width: 100%; background: linear-gradient(90deg, var(--neon), #28d90b); color: #040608; font-weight: 900; font-size: 15px; padding: 14px; border: none; border-radius: 12px; margin-top: 12px; cursor: pointer; letter-spacing: 0.5px; box-shadow: 0 6px 25px rgba(57, 255, 20, 0.35); }
-    .err { color: #ff5c5c; font-size: 12px; text-align: center; margin-top: 6px; display: none; }
+    .main-btn { width: 100%; background: linear-gradient(90deg, var(--neon), #28d90b); color: #040608; font-weight: 900; font-size: 14px; padding: 13px; border: none; border-radius: 12px; margin-top: 10px; cursor: pointer; }
+    .err { color: #ff5c5c; font-size: 11.5px; text-align: center; margin-top: 5px; display: none; }
 
-    /* Modal & VIP Pass */
+    /* Owner Dashboard Styles */
+    #ownerView { display: none; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
+    .kpi { background: var(--card); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 12px; padding: 10px 8px; text-align: center; }
+    .kpi .num { font-size: 16px; font-weight: 900; color: var(--neon); }
+    .kpi .lbl { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+    .booking-card { background: var(--card); border: 1px solid rgba(255,255,255,0.09); border-left: 3px solid var(--neon); border-radius: 12px; padding: 11px; margin-bottom: 9px; }
+    .b-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+    .b-id { font-size: 11.5px; font-weight: 800; color: var(--cyan); }
+    .b-status { font-size: 9.5px; font-weight: 800; padding: 2px 7px; border-radius: 99px; background: rgba(57, 255, 20, 0.15); color: var(--neon); }
+    .b-status.checked { background: rgba(0, 240, 255, 0.15); color: var(--cyan); }
+    .b-info { font-size: 12px; color: #e2e8f0; line-height: 1.5; }
+    .b-actions { display: flex; gap: 6px; margin-top: 8px; }
+    .b-btn { flex: 1; padding: 6px; border-radius: 7px; border: none; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .btn-verify { background: var(--cyan); color: #000; }
+    .btn-call { background: #1e293b; color: #fff; text-decoration: none; text-align: center; }
+
+    /* Modal */
     .overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); z-index: 999; justify-content: center; align-items: center; padding: 14px; }
-    .modal { background: var(--surface); border: 2px solid var(--neon); border-radius: 20px; padding: 20px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 0 40px rgba(57, 255, 20, 0.25); }
-    .qr-wrap { background: #fff; padding: 10px; border-radius: 12px; display: inline-block; margin: 12px 0; }
-    .qr-wrap img { width: 145px; height: 145px; display: block; }
-    .upi-link { display: block; background: var(--neon); color: #000; font-weight: 800; text-decoration: none; padding: 12px; border-radius: 10px; font-size: 14px; }
-    .ghost-btn { width: 100%; background: #1e293b; color: #fff; border: 1px solid #334155; padding: 10px; border-radius: 10px; font-size: 12.5px; margin-top: 8px; cursor: pointer; font-weight: 600; }
-    
-    /* VIP Ticket */
-    .ticket { background: linear-gradient(135deg, #111827, #06090f); border: 1.5px dashed var(--neon); border-radius: 14px; padding: 14px; text-align: left; margin-top: 10px; position: relative; }
-    .ticket-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 8px; }
-    .ticket-body { font-size: 12px; line-height: 1.7; color: #e2e8f0; }
+    .modal { background: var(--surface); border: 2px solid var(--neon); border-radius: 20px; padding: 18px; width: 100%; max-width: 380px; text-align: center; }
+    .qr-wrap { background: #fff; padding: 9px; border-radius: 12px; display: inline-block; margin: 10px 0; }
+    .qr-wrap img { width: 140px; height: 140px; display: block; }
+    .upi-link { display: block; background: var(--neon); color: #000; font-weight: 800; text-decoration: none; padding: 11px; border-radius: 10px; font-size: 13.5px; }
+    .ghost-btn { width: 100%; background: #1e293b; color: #fff; border: 1px solid #334155; padding: 9px; border-radius: 10px; font-size: 12px; margin-top: 7px; cursor: pointer; font-weight: 600; }
+    .ticket { background: #090d14; border: 1.5px dashed var(--neon); border-radius: 12px; padding: 12px; text-align: left; margin-top: 10px; font-size: 12px; line-height: 1.6; }
   </style>
 </head>
 <body>
 
 <div class="app">
+  <!-- Dual Portal Switcher -->
+  <div class="role-bar">
+    <div class="role-btn active" id="btnCust" onclick="switchPortal('customer')">🎮 Customer View</div>
+    <div class="role-btn" id="btnOwner" onclick="switchPortal('owner')">📊 Owner Panel <span class="badge-count" id="leadBadge">3</span></div>
+  </div>
+
   <div class="top-bar">
     <div class="live-badge"><span class="dot"></span> HAUZ KHAS ARENA LIVE</div>
     <div class="rating-pill">★ 5,000+ Parties Hosted</div>
   </div>
 
-  <div class="hero">
-    <h1>LAZER CRAZER</h1>
-    <p>Build Your Custom Party Package & Lock Slot in 60s</p>
-  </div>
-
-  <!-- Event Type Switcher -->
-  <div class="tabs">
-    <div class="tab active" onclick="setMode('party', this)">🎂 Birthday</div>
-    <div class="tab" onclick="setMode('friends', this)">🎮 Squad</div>
-    <div class="tab" onclick="setMode('corp', this)">🏢 Corporate</div>
-  </div>
-
-  <div class="sec-title"><span>1. Select Arena Mission</span></div>
-  <div class="games">
-    <div class="game active" id="g-laser" onclick="pickGame('laser')">
-      <span class="tag">POPULAR</span>
-      <h3>🔫 Laser Tag</h3>
-      <div class="price">₹599 / player</div>
-      <div class="desc">Multi-level neon arena + vests</div>
+  <!-- ================= CUSTOMER VIEW ================= -->
+  <div id="customerView">
+    <div class="hero">
+      <h1>LAZER CRAZER</h1>
+      <p>Build Your Custom Party Package & Lock Slot in 60s</p>
     </div>
-    <div class="game" id="g-combo" onclick="pickGame('combo')">
-      <span class="tag" style="background:var(--neon);">VIP</span>
-      <h3>🏎️ Sim + VR + Laser</h3>
-      <div class="price">₹899 / player</div>
-      <div class="desc">Gran Turismo + VR + Laser Tag</div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="setMode('party', this)">🎂 Birthday</div>
+      <div class="tab" onclick="setMode('friends', this)">🎮 Squad</div>
+      <div class="tab" onclick="setMode('corp', this)">🏢 Corporate</div>
     </div>
-  </div>
 
-  <div class="sec-title">
-    <span>2. Squad Size</span>
-    <span id="pCount" style="color:var(--neon);">12 Players</span>
-  </div>
-  <div class="slider-box">
-    <input type="range" id="pSlider" min="4" max="40" value="12" oninput="calc()" />
-    <div class="presets">
-      <button class="preset-btn" onclick="setPlayers(6)">6 (Squad)</button>
-      <button class="preset-btn" onclick="setPlayers(12)">12 (Party)</button>
-      <button class="preset-btn" onclick="setPlayers(20)">20 (Mega)</button>
-      <button class="preset-btn" onclick="setPlayers(30)">30 (Full Arena)</button>
+    <div class="sec-title"><span>1. Select Arena Mission</span></div>
+    <div class="games">
+      <div class="game active" id="g-laser" onclick="pickGame('laser')">
+        <span class="tag">POPULAR</span>
+        <h3>🔫 Laser Tag</h3>
+        <div class="price">₹599 / player</div>
+        <div class="desc">Multi-level neon arena</div>
+      </div>
+      <div class="game" id="g-combo" onclick="pickGame('combo')">
+        <span class="tag" style="background:var(--neon);">VIP</span>
+        <h3>🏎️ Sim + VR + Laser</h3>
+        <div class="price">₹899 / player</div>
+        <div class="desc">Gran Turismo + VR + Laser</div>
+      </div>
     </div>
-  </div>
 
-  <div class="sec-title"><span>3. Pick Date & Peak Slot</span></div>
-  <div class="row-2">
-    <input type="date" id="dateEl" />
-    <select id="slotEl">
-      <option>02:00 PM (4 Slots Left)</option>
-      <option>04:30 PM (2 Slots Left)</option>
-      <option selected>07:00 PM (1 Slot Left 🔥)</option>
-    </select>
-  </div>
-
-  <div class="sec-title"><span>4. Party Upgrades</span></div>
-  <label class="addon">
-    <span>🎉 Private Neon Lounge + Cake Table (₹1,500)</span>
-    <input type="checkbox" id="addDecor" checked onchange="calc()" />
-  </label>
-  <label class="addon">
-    <span>🍕 Unlimited Pizza, Fries & Mocktails (₹299/head)</span>
-    <input type="checkbox" id="addFood" onchange="calc()" />
-  </label>
-
-  <div class="sec-title"><span>5. Host Contact</span></div>
-  <div class="row-2">
-    <input type="text" id="uName" placeholder="Host Name" />
-    <input type="tel" id="uPhone" placeholder="WhatsApp Number" maxlength="10" />
-  </div>
-
-  <div class="summary">
-    <div class="s-row"><span id="lblGame">Laser Tag (12 × ₹599)</span><span id="costGame">₹7,188</span></div>
-    <div class="s-row"><span>Party Upgrades</span><span id="costAddon">₹1,500</span></div>
-    <div class="s-total"><span>Total Package</span><span id="costTotal">₹8,688</span></div>
-    <div class="lock-banner">
-      <span>Pay 20% UPI Advance to Lock Slot:</span>
-      <span id="costAdv">₹1,738</span>
+    <div class="sec-title"><span>2. Squad Size</span><span id="pCount" style="color:var(--neon);">12 Players</span></div>
+    <div class="slider-box">
+      <input type="range" id="pSlider" min="4" max="40" value="12" oninput="calc()" />
+      <div class="presets">
+        <button class="preset-btn" onclick="setPlayers(6)">6 (Squad)</button>
+        <button class="preset-btn" onclick="setPlayers(12)">12 (Party)</button>
+        <button class="preset-btn" onclick="setPlayers(20)">20 (Mega)</button>
+        <button class="preset-btn" onclick="setPlayers(30)">30 (Full)</button>
+      </div>
     </div>
+
+    <div class="sec-title"><span>3. Pick Date & Peak Slot</span></div>
+    <div class="row-2">
+      <input type="date" id="dateEl" />
+      <select id="slotEl">
+        <option>02:00 PM (4 Slots Left)</option>
+        <option>04:30 PM (2 Slots Left)</option>
+        <option selected>07:00 PM (1 Slot Left 🔥)</option>
+      </select>
+    </div>
+
+    <div class="sec-title"><span>4. Party Upgrades</span></div>
+    <label class="addon">
+      <span>🎉 Private Neon Lounge + Cake Table (₹1,500)</span>
+      <input type="checkbox" id="addDecor" checked onchange="calc()" />
+    </label>
+    <label class="addon">
+      <span>🍕 Unlimited Pizza, Fries & Drinks (₹299/head)</span>
+      <input type="checkbox" id="addFood" onchange="calc()" />
+    </label>
+
+    <div class="sec-title"><span>5. Host Contact</span></div>
+    <div class="row-2">
+      <input type="text" id="uName" placeholder="Host Name" />
+      <input type="tel" id="uPhone" placeholder="WhatsApp Number" maxlength="10" />
+    </div>
+
+    <div class="summary">
+      <div class="s-row"><span id="lblGame">Laser Tag (12 × ₹599)</span><span id="costGame">₹7,188</span></div>
+      <div class="s-row"><span>Party Upgrades</span><span id="costAddon">₹1,500</span></div>
+      <div class="s-total"><span>Total Package</span><span id="costTotal">₹8,688</span></div>
+      <div class="lock-banner">
+        <span>Pay 20% UPI Advance to Lock Slot:</span>
+        <span id="costAdv">₹1,738</span>
+      </div>
+    </div>
+
+    <p class="err" id="errBox">Please enter Host Name & valid 10-digit WhatsApp number.</p>
+    <button class="main-btn" onclick="openPay()">LOCK SLOT & GET VIP PASS →</button>
   </div>
 
-  <p class="err" id="errBox">Please enter Host Name & valid 10-digit WhatsApp number.</p>
-  <button class="main-btn" onclick="openPay()">LOCK SLOT & GET VIP PASS →</button>
+  <!-- ================= OWNER DASHBOARD VIEW ================= -->
+  <div id="ownerView">
+    <div class="hero">
+      <h1 style="background: linear-gradient(90deg, #fff, var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">ARENA MANAGER</h1>
+      <p>Live Bookings, UPI Collections & Gate Entry Check-In</p>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="num" id="kpiBookings">3</div>
+        <div class="lbl">Today's Slots</div>
+      </div>
+      <div class="kpi">
+        <div class="num" id="kpiAdvance" style="color:var(--cyan);">₹5,490</div>
+        <div class="lbl">UPI Advance</div>
+      </div>
+      <div class="kpi">
+        <div class="num" id="kpiPipeline">₹27,450</div>
+        <div class="lbl">Total Value</div>
+      </div>
+    </div>
+
+    <div class="sec-title"><span>Live Booking Feed (Auto-Synced)</span><span style="color:var(--neon);">● LIVE</span></div>
+    <div id="bookingList"></div>
+  </div>
 </div>
 
-<!-- Modal -->
+<!-- Payment & VIP Pass Modal -->
 <div class="overlay" id="modal">
   <div class="modal">
     <div id="stepPay">
       <h2 style="color:var(--neon); font-size:18px;">Instant UPI Slot Lock</h2>
-      <p style="font-size:12px; color:var(--muted); margin-top:4px;">Scan or tap below to pay <strong id="mAdv" style="color:#fff;">₹1,738</strong> advance.</p>
+      <p style="font-size:12px; color:var(--muted); margin-top:4px;">Pay <strong id="mAdv" style="color:#fff;">₹1,738</strong> advance to sync booking to Arena Desk.</p>
       <div class="qr-wrap"><img id="qrPic" src="" alt="QR" /></div>
       <a id="upiBtn" href="#" class="upi-link">Pay via GPay / PhonePe / Paytm</a>
-      <button class="ghost-btn" onclick="completeDemo()">Simulate Payment & Generate VIP Pass ✓</button>
+      <button class="ghost-btn" onclick="completeDemo()">Simulate Payment & Sync to Owner Panel ✓</button>
       <button class="ghost-btn" style="background:transparent;border:none;color:var(--muted);" onclick="closeModal()">Cancel</button>
     </div>
 
     <div id="stepDone" style="display:none;">
       <div style="font-size:32px;">🎟️</div>
-      <h2 style="color:var(--neon); font-size:18px;">VIP Arena Pass Ready!</h2>
-      <p style="font-size:11.5px; color:var(--muted);">Auto-sent to Customer WhatsApp & Arena Desk</p>
+      <h2 style="color:var(--neon); font-size:18px;">VIP Pass Generated!</h2>
+      <p style="font-size:11.5px; color:var(--muted);">Synced live to Owner Panel! Switch top tab to view.</p>
       <div class="ticket" id="ticketData"></div>
-      <button class="main-btn" onclick="closeModal()">Done</button>
+      <button class="main-btn" onclick="viewInOwnerPanel()">View in Owner Panel →</button>
     </div>
   </div>
 </div>
@@ -235,6 +312,22 @@
   const dateInput = document.getElementById('dateEl');
   dateInput.min = todayStr;
   dateInput.value = todayStr;
+
+  // Pre-loaded sample bookings for Owner Dashboard
+  let bookings = [
+    { id: 'LC-VIP-8412', name: 'Aarav Sharma', phone: '9811245670', game: 'Sim + VR + Laser (15x)', slot: '07:00 PM', date: todayStr, total: 14985, adv: 2997, checkedIn: false },
+    { id: 'LC-VIP-8390', name: 'Riya Malhotra', phone: '9873112233', game: 'Laser Tag (10x)', slot: '04:30 PM', date: todayStr, total: 7490, adv: 1498, checkedIn: true },
+    { id: 'LC-VIP-8355', name: 'Kabir Verma', phone: '9910458912', game: 'Laser Tag (8x)', slot: '02:00 PM', date: todayStr, total: 4975, adv: 995, checkedIn: true }
+  ];
+
+  function switchPortal(role) {
+    const isCust = role === 'customer';
+    document.getElementById('customerView').style.display = isCust ? 'block' : 'none';
+    document.getElementById('ownerView').style.display = isCust ? 'none' : 'block';
+    document.getElementById('btnCust').className = isCust ? 'role-btn active' : 'role-btn';
+    document.getElementById('btnOwner').className = !isCust ? 'role-btn owner-active' : 'role-btn';
+    if (!isCust) renderOwner();
+  }
 
   function setMode(mode, el) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -302,21 +395,72 @@
     const sl = document.getElementById('slotEl').value.split(' (')[0];
     const passId = 'LC-VIP-' + Math.floor(1000 + Math.random() * 9000);
 
+    // Add to live Owner Dashboard list
+    bookings.unshift({
+      id: passId,
+      name: name,
+      phone: phone,
+      game: `${CATALOG[selectedKey].title} (${qty}x)`,
+      slot: sl,
+      date: dt,
+      total: totalAmt,
+      adv: advAmt,
+      checkedIn: false
+    });
+    document.getElementById('leadBadge').textContent = bookings.length;
+
     document.getElementById('ticketData').innerHTML = `
-      <div class="ticket-head">
-        <strong style="color:var(--neon);">${passId}</strong>
-        <span style="font-size:10px;background:var(--neon);color:#000;padding:2px 6px;border-radius:4px;font-weight:800;">CONFIRMED</span>
-      </div>
-      <div class="ticket-body">
-        <strong>Host:</strong> ${name} (+91 ${phone})<br/>
-        <strong>Mission:</strong> ${CATALOG[selectedKey].title} (${qty} Players)<br/>
-        <strong>Date & Time:</strong> ${dt} @ ${sl}<br/>
-        <strong>Advance Paid:</strong> ₹${advAmt.toLocaleString('en-IN')} (UPI)<br/>
-        <strong>Due at Arena:</strong> ₹${(totalAmt - advAmt).toLocaleString('en-IN')}
-      </div>
+      <strong>Pass ID:</strong> <span style="color:var(--neon);">${passId}</span><br/>
+      <strong>Host:</strong> ${name} (+91 ${phone})<br/>
+      <strong>Mission:</strong> ${CATALOG[selectedKey].title} (${qty} Players)<br/>
+      <strong>Slot:</strong> ${dt} @ ${sl}<br/>
+      <strong>UPI Advance Paid:</strong> ₹${advAmt.toLocaleString('en-IN')}
     `;
     document.getElementById('stepPay').style.display = 'none';
     document.getElementById('stepDone').style.display = 'block';
+  }
+
+  function viewInOwnerPanel() {
+    closeModal();
+    switchPortal('owner');
+  }
+
+  function toggleCheckIn(idx) {
+    bookings[idx].checkedIn = !bookings[idx].checkedIn;
+    renderOwner();
+  }
+
+  function renderOwner() {
+    const listEl = document.getElementById('bookingList');
+    let sumAdv = 0;
+    let sumTot = 0;
+    listEl.innerHTML = '';
+
+    bookings.forEach((b, i) => {
+      sumAdv += b.adv;
+      sumTot += b.total;
+      listEl.innerHTML += `
+        <div class="booking-card" style="border-left-color: ${b.checkedIn ? 'var(--cyan)' : 'var(--neon)'};">
+          <div class="b-top">
+            <span class="b-id">${b.id} • ${b.slot}</span>
+            <span class="b-status ${b.checkedIn ? 'checked' : ''}">${b.checkedIn ? '✓ CHECKED IN' : 'UPI PAID'}</span>
+          </div>
+          <div class="b-info">
+            <strong>${b.name}</strong> (+91 ${b.phone})<br/>
+            ${b.game} • Date: ${b.date}<br/>
+            Advance: <strong style="color:var(--neon);">₹${b.adv.toLocaleString('en-IN')}</strong> | Due: ₹${(b.total - b.adv).toLocaleString('en-IN')}
+          </div>
+          <div class="b-actions">
+            <button class="b-btn btn-verify" onclick="toggleCheckIn(${i})">${b.checkedIn ? 'Undo Check-In' : '✓ Verify Gate Entry'}</button>
+            <a class="b-btn btn-call" href="tel:+91${b.phone}">📞 Call Host</a>
+          </div>
+        </div>
+      `;
+    });
+
+    document.getElementById('kpiBookings').textContent = bookings.length;
+    document.getElementById('kpiAdvance').textContent = '₹' + sumAdv.toLocaleString('en-IN');
+    document.getElementById('kpiPipeline').textContent = '₹' + sumTot.toLocaleString('en-IN');
   }
 
   function closeModal() { document.getElementById('modal').style.display = 'none'; }
